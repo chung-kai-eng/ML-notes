@@ -7,6 +7,9 @@
 #include<map> 
 // the method to use STL (vector, queue, stack, set, map)
 //https://larry850806.github.io/2016/06/06/STL1/
+
+// method of vector extended function 
+// https://mropengate.blogspot.com/2015/07/cc-vector-stl.html
 using namespace std;
 
 class input{
