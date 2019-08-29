@@ -4,6 +4,7 @@
 #include<queue>
 #include<stack>
 #include<set>
+#include<map> 
 // the method to use STL (vector, queue, stack, set, map)
 //https://larry850806.github.io/2016/06/06/STL1/
 using namespace std;
@@ -46,6 +47,8 @@ class Rectangle{
 void vec_method();
 void queue_method();
 void stack_method();
+void set_method();
+void map_method();
 
 int main(){
 	/*
@@ -58,7 +61,8 @@ int main(){
 	//vec_method();
 	//queue_method();
 	//stack_method();
-	
+	//set_method();
+	//map_method();
 	return 0;	
 }
 
@@ -103,7 +107,32 @@ void stack_method(){
 		s.pop();
 	}
 }
+void set_method(){
+	set<int> mySet;
+    mySet.insert(20);   // mySet = {20}
+    mySet.insert(10);   // mySet = {10, 20}
+    mySet.insert(30);   // mySet = {10, 20, 30}
 
+    cout << mySet.count(20) << endl;    // 存在 -> 1
+    cout << mySet.count(100) << endl;   // 不存在 -> 0
+	cout << "after erase : " << endl;
+    mySet.erase(20);                    // mySet = {10, 30}
+    cout << mySet.count(20) << endl;    // 0
+}
+void map_method(){
+	map<string, int> m;     // 從 string 對應到 int
+                        // 設定對應的值
+    m["one"] = 1;       // "one" -> 1
+    m["two"] = 2;       // "two" -> 2
+    m["three"] = 3;     // "three" -> 3
+
+    cout << m.count("two") << endl;     // 1 -> 有對應
+    cout << m.count("ten") << endl;     // 0 -> 沒有對應
+    cout << m["one"] << endl;       // 1
+    cout << m["three"] << endl;     // 3
+    cout << m["ten"] << endl;       // 0 (無對應值)
+
+}
 
 
 
