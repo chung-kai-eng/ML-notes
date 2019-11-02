@@ -116,26 +116,29 @@ void set_method(){
     mySet.insert(10);   // mySet = {10, 20}
     mySet.insert(30);   // mySet = {10, 20, 30}
 
-    cout << mySet.count(20) << endl;    // ¦s¦b -> 1
-    cout << mySet.count(100) << endl;   // ¤£¦s¦b -> 0
+    cout << mySet.count(20) << endl;    // ï¿½sï¿½b -> 1
+    cout << mySet.count(100) << endl;   // ï¿½ï¿½ï¿½sï¿½b -> 0
 	cout << "after erase : " << endl;
     mySet.erase(20);                    // mySet = {10, 30}
     cout << mySet.count(20) << endl;    // 0
 }
 void map_method(){
-	map<string, int> m;     // ±q string ¹ïÀ³¨ì int
-                        // ³]©w¹ïÀ³ªº­È
+	map<string, int> m;     // ï¿½q string ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ int
+                        // ï¿½]ï¿½wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     m["one"] = 1;       // "one" -> 1
     m["two"] = 2;       // "two" -> 2
     m["three"] = 3;     // "three" -> 3
 
-    cout << m.count("two") << endl;     // 1 -> ¦³¹ïÀ³
-    cout << m.count("ten") << endl;     // 0 -> ¨S¦³¹ïÀ³
+    cout << m.count("two") << endl;     // 1 -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    cout << m.count("ten") << endl;     // 0 -> ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     cout << m["one"] << endl;       // 1
     cout << m["three"] << endl;     // 3
-    cout << m["ten"] << endl;       // 0 (µL¹ïÀ³­È)
+    cout << m["ten"] << endl;       // 0 (ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
 }
+
+
+
 
 
 
