@@ -1,0 +1,117 @@
+\documentclass[12pt]{article}  % 11pt為字體大小
+\usepackage[a4paper,margin=0.5in]{geometry}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{微軟正黑體}
+
+% 這兩行一定要加，中文才能自動換行
+\XeTeXlinebreaklocale "zh" 
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{caption,graphicx}
+\usepackage{subfigure}
+\usepackage{enumerate}
+\usepackage{amsmath,amsthm,amssymb}
+\title{\LaTeX Demo}
+\author{Statistical Computing}
+\date{March 3, 2020}
+% ========================================================
+\begin{document}
+
+\maketitle  % 顯示標題、作者、日期
+
+\section*{itemize}
+\begin{itemize}
+	\item 張仲凱
+	\item def
+	\item ghi
+\end{itemize}
+
+\section*{enumerate}
+\begin{enumerate}[1]
+	\item abc
+	\item def
+	\item ghi
+\end{enumerate}
+
+
+\section*{array}
+$$ \left( \begin{array}{cccccc}
+1 & 2 & 3 & 1 & 2 & 3 \\
+4 & 5 & 6 & 4 & 5 & 6 \\
+7 & 8 & 9 & 7 & 8 & 9
+\end{array} \right) $$
+
+\section*{pmatrix}
+$$ \begin{pmatrix}
+1 & 2 & 3 & 1 & 2 & 3 \\
+4 & 5 & 6 & 4 & 5 & 6 \\
+7 & 8 & 9 & 7 & 8 & 9
+\end{pmatrix}$$
+
+\section*{array}
+$$|x| = \left\{ \begin{array}{rr}
+x,  & \mbox{if $x \geq 0$} \\
+-x, & \mbox{if $x < 0$}
+\end{array} \right.$$
+
+\section*{cases}
+$$ |x|=
+\begin{cases}
+x,  & \mbox{if $x \geq 0$} \\
+-x, & \mbox{if $x < 0$}
+\end{cases}$$
+
+\section*{math mode}
+\begin{itemize}
+	\item $ \alpha, \beta, \gamma, \Gamma, \zeta, \eta, \sigma, \Sigma $
+	\item $ \displaystyle \lim_{x \to a} f(x) $
+	\item $ f^\prime(x) $
+	\item $ \displaystyle \int_a^b f(x) dx $
+	\item $ \sqrt{x^2+3} $
+	\item $ \sin, \cos, \log, \ln $
+	\item $ \dfrac{x-1}{x+1} $
+\end{itemize}
+
+\section*{align}
+\begin{align}
+	\alpha &= a + b - c \\
+	\beta  &= 2c
+\end{align}
+
+\begin{align*}
+	\alpha &= a + b - c \\
+		   &= 2c \\
+		   &= 5
+\end{align*}
+
+\begin{equation} \begin{split}
+	\alpha &= a + b - c \\
+	\beta  &= 2c
+\end{split} \end{equation}
+
+\section*{tabular}
+\begin{center}  % 置中
+\begin{tabular}{ccc}
+	\toprule[2pt]
+	Jan. & Feb. & Mar. \\
+	\midrule[1pt]
+	2 & 0 & 3 \\
+	1 & 4 & 7 \\
+	\bottomrule[2pt]
+\end{tabular}
+\end{center}
+
+\section*{graphic}
+%\begin{figure}[ht]
+%\begin{center}
+%\includegraphics[scale=1.5]{NTHU.jpg}
+%\caption{國立清華大學}
+%\end{center}
+%\end{figure}
+
+\end{document}

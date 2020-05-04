@@ -1,0 +1,832 @@
+---
+title: "Data Visualization with ggplot2 (EDA approach)"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    df_print: paged
+    number_sections: yes
+    toc: yes
+    toc_float:
+      collapse: yes
+      soomth_scroll: no
+---
+
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(RColorBrewer) #做brewer.pal()時，用的package
+```
+
+
+
+#Dataset: mtcars
+
+取自`1974 Motor Trend US magazine`    
+記錄1973-1974的32款汽車(n=32)，   
+的11項與汽車設計和表現有關的變項(p=11)。   
+   
+
+先來看看資料長相：  
+
+```{r}
+mtcars
+```
+   
+
+各變項代表的意義：  
+
+```{r eval=FALSE}
+? mtcars
+```
+
+ 
+* mpg: miles per gallon  (油耗的指標)每加侖汽油行駛英里數；連續型
+* cyl: Number of cylinders 的汽缸數；類別?連續？
+* disp: Displacement(cu.in.) 單汽缸排氣量；連續型
+* hp: Gross horsepower 馬力；連續型
+* drat: Rear axle ratio 後輪軸比; 連續型
+* wt: Weight(lb / 1000) 車重；連續型
+* qsec:  1/4 mile time 靜止到1/4 mile所需的時間 (加速能力的指標); 連續型
+* vs: V/S V型引擎或Straight引擎(直列引擎); 類別型
+* am: Transmission(0 = automatic, 1 = manual) 自排or手排；類別型
+* gear: Number of forward gears 前進檔數; 類別?連續？
+* carb: Number of carburetors 化油器數量; 類別?連續？
+
+
+#初步全覽
+
+目標：觀察變數類型、檢查異常資料、發想可能題目  
+
+先用`GGally:ggpairs()`一網打盡全部變數  
+
+```{r message=FALSE, warning=FALSE}
+library(GGally)
+ggpairs(mtcars)
+```
+
+這張圖的主對角線是distribution，非對角線是association/correlation  
+看起來所有變數都是"連續型"  
+但仔細檢查會發現，`cyl`, `vs`, `am`, `gear`, `carb` 是類別型變數  
+所以，將資料轉換格式，再做一次ggpairs，  
+觀察對角線的distribution, 非對角線的association/correlation  
+
+```{r message = FALSE, warning = FALSE}
+mtcars <- mutate(mtcars, cyl = factor(cyl), vs = factor(vs),
+                 am = factor(am), gear = factor(gear),
+                 carb=factor(carb)) %>%
+        select(mpg, disp:qsec, cyl, vs:carb)
+ggpairs(mtcars)
+```
+
+  
+也會用`summary`看看數值摘要，以及可能的異常值  
+
+```{r}
+summary(mtcars)
+```
+  
+對於連續型變數，correlation matrix也有一個好用的package可以用：  
+
+```{r message=FALSE, warning=FALSE}
+#install.packages("corrplot")
+library(corrplot)
+corMat <- cor(mtcars[,1:6])
+corrplot(corMat, method="number")
+```
+
+再多加一些指令，看的更清楚：  
+
+```{r}
+corrplot.mixed(corMat, lower="square", upper="number",
+               order = "hclust", tl.col="black") 
+```
+
+可以看出左上角是一群，右下角是一群，兩群成負相關。  
+
+
+
+# 單變數探索
+
+有興趣的問題大概分兩部分：  
+1. marginal distribution為何？  
+2. 離散型變數各level的次數排序為何？  
+
+## marginal distribution(連續型)？  
+
+看連續型變數的distribution，大致上分三種方式：  
+1. histogram  
+2. density  
+3. boxplot  
+
+以`mtcars`的`mpg(miles per gallon)`為例，  
+以下以三種圖形來探索mpg 的 distribution  
+
+1. 看histogram
+```{r}
+ggplot(mtcars, aes(mpg)) +
+  geom_histogram(bins=10) #bins表示你要切成幾段，預設是30
+  #geom_histogram(binwidth=3) + #binwidth表示你一段想要多長
+```
+
+2. 看density
+```{r}
+ggplot(mtcars, aes(mpg)) +
+  geom_density(bw=3) #bw是bandwith的縮寫
+```
+
+3. 看box-plot  
+```{r}
+ggplot(mtcars, aes(x = 1, y = mpg))+
+        geom_boxplot()
+```
+
+
+4. 搭配資料處理的技巧，再探索一次：  
+
+從density和boxplot都看得出有outlier在作怪，試試拿掉outlier後的distributino會變怎樣  
+
+```{r}
+mtcars %>%
+        filter(mpg < 30) %>%
+        ggplot(aes(mpg)) +
+        geom_density(bw=3) + #bw是bindwith的縮寫
+        xlim(0,35)+
+        ggtitle("Empirical density plot of miles per gallon")
+```
+
+
+
+## marginal distribution(離散型)？
+
+看離散型變數的distribution，大致上分兩種方式：  
+1. bar chart  
+2. pie chart (不推)  
+
+以`mtcars`的`cyl(Number of cylinders)`為例，  
+以下以兩種圖形來探索cyl 的 distribution
+
+1. bar chart  
+```{r}
+ggplot(mtcars, aes(cyl))+
+        geom_bar()
+```
+
+為什麼不用指定`aes(y=)`？  
+因為`geom_bar()`有預設`geom_bar(stat="count")`  
+所以在背後已經先用`count()`算出`count(cyl)`的次數分配表，才畫圖。  
+(見`?gemo_bar`)
+
+```{r}
+ggplot(mtcars, aes(cyl))+
+        geom_bar(stat="count")
+# stat = "identity" <- height of the bars to represent values in the data
+```
+
+所以可以想像，如果`stat`我不使用預設值，而改用`stat="identity"`  
+那應該畫不出圖來：  
+
+```{r eval=FALSE}
+ggplot(mtcars, aes(cyl))+
+        geom_bar(stat="identity")
+```
+
+所以可以想像，依照上面ggplot和geom_bar的邏輯，  
+應該可以試試另一種畫法：`dplyr + ggplot2`  
+
+介紹`dplyr: count()`
+```{r}
+count(mtcars, cyl)
+```
+
+這其實就是`geom_bar(stat="count")`在幫我們做的事，  
+而現在我想自己做：  
+
+利用dplyr製作出新的data.frame，再丟到ggplot裡面畫圖：  
+```{r}
+mtcars %>% 
+        count(cyl) %>%
+        ggplot(aes(x=cyl, y=n))+
+        geom_bar(stat="identity")
+        #若用geom_bar()，會error，why?
+```
+
+再多講一點，如果我想把y軸變成"百分比"，而不是"次數"，可以怎麼做？  
+
+```{r}
+mtcars %>% 
+        count(cyl) %>%
+        mutate(percent=n/sum(n)) %>%
+        ggplot(aes(x = cyl, y = percent))+
+        geom_bar(stat="identity")
+```
+
+
+
+
+
+2. pie chart (被排擠的圖形)
+
+```{r}
+ggplot(mtcars, aes(x=1, fill=cyl))+
+        geom_bar()+
+        coord_polar(theta="y")
+```
+
+為什麼不鼓勵用pie chart？  
+因為Pie Chart做的到的，bar chart都做的到，且做的更好  
+而且Pie Chart在變數個數>3以後，會變的很不清楚：  
+
+```{r}
+ggplot(mtcars, aes(x=1, fill=carb))+
+        geom_bar()+
+        coord_polar(theta="y")
+```
+
+carb(化油器數量)=1, 2, 4，誰大？  
+化油器數量=6, 8，誰大？  
+用Pie Chart來看很不清楚，但如果用bar chart，就一目了然：  
+
+```{r}
+ggplot(mtcars, aes(carb))+
+        geom_bar()
+```
+
+
+## 離散型變數的level排序？
+
+延續上例，我們在觀察離散型變數的時候，  
+有時候更care哪些level的次數最多？哪些最少？排序情形為何？  
+這些問題都可以用以下圖形做到  
+1. bar chart  
+2. scatter plot  
+3. Cleveland Dot plot  
+
+1. barchart
+```{r}
+mtcars %>%
+        count(carb) %>%
+        ggplot(aes(x = fct_reorder(carb,n), y = n))+
+        geom_bar(col = "#FF7744", fill = "#FFAA33", stat="identity")
+```
+
+再多加兩個東西：給座標軸label & 把座標軸翻轉  
+```{r}
+mtcars %>%
+        count(carb) %>%
+        ggplot(aes(x=fct_reorder(carb,n),y=n))+
+        geom_bar(col = "#FF7744", fill = "#FFAA33", stat="identity")+
+        labs(x="Number of carburetors")+
+        coord_flip()
+```
+
+2. scatter plot  
+```{r}
+mtcars %>% 
+        count(carb) %>%
+        ggplot(aes(x=n, y=fct_reorder(carb,n)))+
+        geom_point(col = "#FF7744", fill = "#FFAA33")+
+        labs(y="Number of carburetors")
+```
+
+
+3. Cleveland Dot plot  
+
+```{r}
+mtcars %>% 
+        count(carb) %>%
+        ggplot(aes(x=n, y=fct_reorder(carb,n)))+
+        geom_point(size=3)+
+        geom_segment(aes(xend=0,yend=carb))+
+        labs(y="Number of carburetors")+
+        theme_bw()
+```
+  
+  
+## wrap up
+```{r eval=FALSE}
+#histogram
+ggplot(mtcars, aes(mpg)) +
+        geom_histogram(bins=10)
+
+#density
+ggplot(mtcars, aes(mpg)) +
+        geom_density(bw=3)
+
+#box-plot
+ggplot(mtcars, aes(x=1, y=mpg))+
+        geom_boxplot()
+
+#bar chart (法一)
+ggplot(mtcars, aes(cyl))+
+        geom_bar()
+
+#bar chart (法二)
+mtcars %>% 
+        count(cyl) %>%
+        ggplot(aes(x=cyl, y=n))+
+        geom_bar(stat="identity")
+
+#bar chart (y軸換百分比)
+mtcars %>% 
+        count(cyl) %>%
+        mutate(percent=n/sum(n)) %>%
+        ggplot(aes(x=cyl, y=percent))+
+        geom_bar(stat="identity")
+
+#bar chart (reorder levels)
+mtcars %>%
+        count(carb) %>%
+        ggplot(aes(x=fct_reorder(carb,n),y=n))+
+        geom_bar(stat="identity")
+
+#其他
+coord_flip() #翻轉座標軸
+labs(x=" ", y=" ") #增加x軸, y軸的標籤
+```
+
+
+
+# 雙變數探索
+
+有興趣的問題大概分兩部分：  
+1. 變數間的comparison為何？  
+2. 變數間的relationship為何？  
+
+## 變數間的comparison(連續|離散)？  
+
+這其實和探討連續變數given在離散變數時的conditional distribution一樣  
+大概可以分成3種方式  
+  
+
+1. 排在一起的 histogram / frequency plot / density  
+2. facet的 histogram / frquency plot / density  
+3. side by side box plot  
+  
+
+以`mtcars`裡的 油耗表現(mpg) 和 汽缸數量(cyl)的關係為例  
+  
+  
+Note:  
+`mpg`: miles per gallon；連續型變項；數字越大，油耗表現越好
+`cyl`: 汽缸數目；離散型變項；分成4, 6, 8三個levels
+
+
+1.1 排在一起的histogram (錯誤版)
+```{r}
+ggplot(mtcars, aes(x=mpg, fill=cyl)) +
+        geom_histogram(bins = 10)
+```
+
+default就是用堆疊的方式來顯示，非常醜陋；
+改成"idetity"就會是照排，再加alpha來區隔：  
+
+1.1 排在一起的histogram (正確版)
+```{r}
+ggplot(mtcars, aes(x=mpg,fill=cyl)) +
+        geom_histogram(bins = 10,position="identity", alpha=0.4)
+```
+
+1.2 排在一起的frequency plot
+```{r}
+ggplot(mtcars, aes(x=mpg, col=cyl)) +
+        geom_freqpoly(bins=10)
+```
+  
+要注意的小細節，就是aes()中，fill改col，因為你現在要畫的是線的顏色，所以不是用fill填滿。
+
+
+1.3 排在一起的density
+```{r}
+ggplot(mtcars, aes(x = mpg, col = cyl, fill = cyl)) +
+        geom_density(bw=3, alpha = 0.3)
+```
+
+
+2.1 facet的 histogram  
+```{r}
+ggplot(mtcars, aes(x=mpg)) +
+        geom_histogram(bins = 10,  fill = "#FFAA33")+
+        facet_grid(~cyl, labeller = label_both)
+```
+
+2.2 facet的 frquency plot  
+```{r}
+ggplot(mtcars, aes(x=mpg))+
+        geom_freqpoly(bins=10,  col = "#5599FF")+
+        facet_grid(~cyl, labeller = label_both)
+```
+
+2.3 facet的 density  
+```{r}
+ggplot(mtcars, aes(x=mpg))+
+        geom_density(bw=3)+
+        facet_grid(~cyl, labeller=label_both)
+```
+
+
+3. side-by-side box plot
+```{r}
+ggplot(mtcars, aes(x = cyl, y = mpg)) +
+  geom_boxplot(col = "#FFAA33", fill = "#FFAA33", alpha = 0.4)
+```
+
+搭配數字型的摘要
+
+```{r}
+mtcars %>% 
+        group_by(cyl) %>%
+        summarize(mpg_median=median(mpg))
+```
+
+
+## 變數間的relationship(間斷vs間斷)？ 
+
+這其實就是類別資料分析裡面的contingency table問題  
+也和探討離散變數given在離散變數時的conditional distribution一樣  
+而看 (離散|離散) 的 conditional distribution，大致上分2種方式：  
+
+0. contingency table & conditional probability table  
+1. conditional bar chart
+2. facet版bar chart
+
+以`mtcars`的`cyl`和`vc`的關係為例：  
+
+Note:
+`cyl`: 汽缸數目；離散型變項；分成4, 6, 8三個levels
+`vc` : 引擎的汽缸排列方式；離散型；分成兩個levels: 0=v式排法; 1=直列式排法
+domain knowledge: 常見的是V6, v8, v10; 直4、直6  
+
+0.1 contingency table
+```{r}
+tab1 <- table(mtcars$cyl, mtcars$vs)
+tab1
+```
+
+0.2 conditional probability table
+```{r}
+round(prop.table(tab1, 1),2)
+round(prop.table(tab1, 2),2)
+```
+
+兩邊都會看，現在先看condition在cyl時的distribution:  
+
+`P(vs | cyl=4)`可以看出，汽缸數為4時，採用直列排法佔大多數(91%)  
+`P(vs | cyl=6)`可以看出，汽缸數為6時，採用直列排法的比例稍高(57%)  
+`P(vs | cyl=8)`可以看出，汽缸數為8時，全都採用V型的排法  
+
+
+1. conditional bar chart
+```{r}
+ggplot(mtcars, aes(x=cyl, fill=vs))+
+        geom_bar(position="fill")
+```
+
+
+2. facet bar chart
+```{r}
+ggplot(mtcars, aes(x=vs))+
+        geom_bar()+
+        facet_grid(.~cyl, labeller = label_both) 
+```
+
+ 
+## 變數間的relationship(連續vs連續)？  
+
+這邊大家熟到不能再熟了，scatter plot 和 linear model的組合  
+以下以`mtcars`的 wt (汽車的重量weight) 和 mpg (油耗)的 relationship 為例: 
+
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()
+```
+
+看起來，越重的汽車，他每加侖汽油可以跑得距離越短(油耗表現差)。
+
+
+看了correlation，就會想fit一個linear model給他，作法很簡單：  
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()+
+  geom_smooth(method="lm")
+```
+
+用個LOESS也蠻炫的：  
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()+
+  geom_smooth(method="loess")
+```
+
+
+## 變數間的relationship(順序vs順序)？  
+
+順序型對順序型變數，也可用scatter plot，但因為會有over-plotting的現象，所以改用jittering來改善    
+以下，先看一下demo的資料集：  
+
+```{r message=FALSE}
+library(car)
+head(Vocab)
+Vocab$education <- factor(Vocab$education)
+Vocab$vocabulary <- factor(Vocab$vocabulary)
+summary(Vocab)
+ggplot(Vocab, aes(x=education))+
+        geom_bar(col = "#5599FF", fill = "#5599FF", alpha = 0.8)
+ggplot(Vocab, aes(x=vocabulary))+
+        geom_bar(col = "#5599FF", fill = "#5599FF", alpha = 0.8)
+```
+
+原始的scatter plot
+```{r}
+ggplot(data=Vocab, aes(x=education, y=vocabulary))+
+  geom_point()
+```
+
+改用jitter：
+```{r}
+ggplot(data=Vocab, aes(x=education, y=vocabulary))+
+  geom_jitter()
+```
+
+加個透明度，換一下點的shape，會更清楚：
+```{r}
+ggplot(data=Vocab, aes(x=education, y=vocabulary))+
+  geom_jitter(alpha = 0.3,shape=1)
+```
+
+## wrap up  
+
+4.1 變數間的comparison(連續|離散)  
+```{r eval=FALSE}
+#condition在類別變數(cyl)的histogram
+ggplot(mtcars, aes(x=mpg,fill=cyl)) + #重點在"fill"
+        geom_histogram(bins = 10, position="identity", alpha=0.4)
+#condition在類別變數(cyl)的frequency plot
+ggplot(mtcars, aes(x=mpg, col=cyl)) + #為何變"col"
+        geom_freqpoly(bins=10) #重點在"freqpoly"
+#condition在類別變數的density plot
+ggplot(mtcars, aes(x = mpg, col = cyl, fill = cyl)) + #為何有col有fill?
+        geom_density(bw=3, alpha = 0.3)
+#condition在類別變數的boxplot
+ggplot(mtcars, aes(x = cyl, y = mpg)) +
+  geom_boxplot()
+
+
+#善用"facet_grid(row~col)"
+ggplot(mtcars, aes(x=mpg)) +
+        geom_histogram(bins = 10)+
+        facet_grid(~cyl, labeller = label_both)
+```
+
+
+4.2 變數間的relationship(間斷vs間斷)
+```{r eval=FALSE}
+#conditional bar chart
+ggplot(mtcars, aes(x=cyl, fill=vs))+
+        geom_bar(position="fill") #上下兩個"fill"差在哪？
+#facet bar chart
+ggplot(mtcars, aes(x=vs))+
+        geom_bar()+
+        facet_grid(.~cyl, labeller = label_both) 
+```
+
+4.3變數間的relationship(連續vs連續)
+```{r eval=FALSE}
+#scatter plot + lm
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()+
+  geom_smooth(method="lm")
+```
+
+4.4變數間的relationship(順序vs順序)
+```{r eval=FALSE}
+#傳統的scatter plot會出現overplotting
+ggplot(data=Vocab, aes(x=education, y=vocabulary))+
+  geom_point()
+
+#利用jitter()來改善  
+ggplot(data=Vocab, aes(x=education, y=vocabulary))+
+  geom_jitter()
+```
+
+
+# 三變數探索
+
+先畫出二維圖形(例如：scatter plot, conditional bar plot, dot plot, ...)
+再善用以下工具：  
+
+* color  
+* size  
+* shape  
+* facet  
+
+##scatter plot加入第三維資訊 
+
+假如我在看wt (汽車的重量weight, wt) 和 mpg (油耗)的關係時，
+想加入cyl(汽缸數量)的資訊，那我可以：  
+
+1. 用color表示第三維  
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg, col=cyl)) +
+        geom_point(size=2, alpha=0.7)
+```
+
+所以發現`cyl=4`的車子，車重普遍較輕，油耗也較好，看起來有線性關係    
+`cyl=6`的車子，車重和油耗都介於中間，看起來線性關係不高    
+`cyl=8`的車子，車重較重，油耗表現也較差，看起來有現象關係  
+
+
+2. 用size表示第三維
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg, size = cyl)) +
+  geom_point(alpha=0.5, col="blue")
+```
+
+3. 也可以用label  
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg, label=cyl))+
+  geom_text()
+```
+
+4. 或是乾脆用facet
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg)) +
+        geom_point()+
+        facet_grid(~cyl, labeller = label_both)
+```
+
+
+最後覺得依照col來分最漂亮，那，是否需要各fit一個linear model？  
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg, col = cyl)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE)
+```
+
+和全部只fit一個迴歸線差在哪？
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg, col = cyl)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE)+
+  stat_smooth(aes(group=1),method = "lm", se = FALSE)
+```
+
+恩，legend不大對，改一下：  
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg, col = cyl)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE)+
+  stat_smooth(aes(group=1, col="ALL"),method = "lm", se = FALSE)
+```
+
+## bar plot 加入第三維資訊  
+
+看一下這張圖(bar plot的另一種用法)
+```{r}
+data(mtcars)
+mtcars2 <- mtcars %>%
+        rownames_to_column() %>%
+        mutate(cyl=factor(cyl))
+
+ggplot(mtcars2, aes(x=rowname, y=mpg))+
+        geom_bar(stat="identity", fill = "#5599FF")+
+        coord_flip()
+```
+  
+從圖中可以看出各款車型的油耗表現  
+如果我現在想以color的方式加入第三維cyl的資訊  
+可以這樣做：  
+
+```{r}
+ggplot(mtcars2, aes(x=rowname, y=mpg, fill=cyl))+
+        geom_bar(stat="identity")+
+        coord_flip()
+```
+
+看起來亂七八糟阿...我想讓相同顏色的都放在一起，且都從最大排到最小，可以怎麼做？  
+用`dplyr + forcats + ggplot` !!  
+
+```{r}
+mtcars2 %>%
+        arrange(desc(cyl), mpg) %>%
+        ggplot(aes(x=fct_relevel(rowname, rowname), y=mpg, fill=cyl))+
+        geom_bar(stat="identity")+
+        labs(x="")+
+        coord_flip()
+```
+
+
+```{r include=FALSE}
+data(mtcars)
+mtcars <- mutate(mtcars, cyl=factor(cyl), vs=factor(vs),
+                 am=factor(am),gear=factor(gear),
+                 carb=factor(carb))
+```
+
+
+# 四變數以上探索
+
+通常都不太好閱讀了，但還是介紹一些招給大家：  
+
+重點是擺在知道有哪些招    
+但如果圖形不好讀，就不要用了  
+
+一樣以 車重(wt) 對 油耗表現(mpg) 的scatter plot為例：  
+
+1. 將兩個類別資料的level合併，再著色 = 一次加2維資訊  
+```{r}
+#把cyl和am這兩欄資訊合併，變成新的類別變數
+mtcars$cyl_am <- paste(mtcars$cyl, mtcars$am, sep = "_")
+#分成藍色系和紅色系
+myCol <- rbind(brewer.pal(9, "Blues")[c(3,6,8)],
+               brewer.pal(9, "Reds")[c(3,6,8)])
+
+b1 <- ggplot(mtcars, aes(x = wt, y = mpg, col = cyl_am)) +
+        geom_point(size=2, alpha=0.7) +
+        # Add a manual colour scale
+        scale_color_manual(values = myCol)
+b1
+```
+
+2.用facet，再加入`gear & vs`這兩維的資訊：    
+```{r}
+b1 + facet_grid(gear~vs, labeller = label_both)
+```
+
+3. 再利用size的功能，加入disp的資訊進去    
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg, col = cyl_am, size=disp)) +
+  geom_point() +
+  scale_color_manual(values = myCol) +
+  facet_grid(gear~vs, labeller = label_both)
+```
+
+恩...這張圖有7維的資訊了  
+(wt + mpg)的scatter plot +  
+(cyl + am) +  
+disp +  
+(vs + gear)
+
+但我不相信這些圖能給你什麼靈感XDD 太亂了拉！！  
+
+# Lattice簡介  
+
+* 這邊介紹另一種適合處理多變量資料(尤其是conditional graphs)的繪圖套件：`lattice`  
+* 不同於`ggplo2`是一層一層的疊加指令上去，`lattice`更像`base`的繪圖，都是一個指令就結束了。  
+* 萬用的輸入格式為：  `graph_type(formula, data=)`  
+* 其中，`formula`的部分，對於統計人來說，就相當直覺了  
+* 以下，假設x, y為連續型變數，F1, F2為類別型變數，傳統的圖形對照如下：  
+
+graph_type |  description  |  formula
+-----------|---------------|-----------------
+xyplot     |  scatter plot |  `y~x`
+xyplot     |  scatter plot |  `y~x|F1*F2`
+histogram  |  histogram    |  `~x`
+histogram  |  histogram    |  `~x|F1*F2`
+densityplot|  density plot |  `~x|F1*F2`
+bwplot     |  boxplot      |  `x~F1`
+
+##一些範例   
+```{r warning=FALSE, message=FALSE}
+#install.packages(lattice)
+library(lattice)
+```
+
+Scatter plot (ggplot2)  
+```{r}
+ggplot(mtcars, aes(x=wt, y=mpg))+
+        geom_point(col="blue")+
+        facet_grid(gear~vs, labeller = label_both)+
+        labs(title="Scatterplots by V/S and Gears",
+             x="Car Weight",
+             y="Miles per Gallon")
+```
+
+Scatter plot (lattice)
+```{r}
+xyplot(mpg~wt|vs*gear, data=mtcars, 
+  	main="Scatterplots by V/S and Gears", 
+       ylab="Miles per Gallon", xlab="Car Weight")
+```
+
+Density plot (ggplot2)
+```{r}
+ggplot(mtcars, aes(x=mpg))+
+        geom_density(bw=3, col="blue")+
+        facet_grid(~cyl)+
+        labs(title="Density Plot by Number of Cylinders",
+             xlab="Miles per Gallon")
+```
+
+Density plot (lattice)
+```{r}
+densityplot(~mpg|cyl, data=mtcars,
+  	main="Density Plot by Number of Cylinders",
+  	xlab="Miles per Gallon")
+```
+
+
+##延伸閱讀  
+[Lattice: Multivariate Data Visualization with R](https://www.springer.com/us/book/9780387759685)
+

@@ -1,0 +1,371 @@
+---
+title: "The Foundamentals of ggplot2"
+date: 
+output: 
+  beamer_presentation:
+    includes:
+       in_header: header.tex
+    latex_engine: xelatex
+    toc: true
+    theme: "Singapore"
+    fonttheme: "structurebold"
+    slide_level: 2
+    fig_width: 5
+    fig_height: 3
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.height=3.2, fig.width=5.6, warning=FALSE, message=FALSE)
+```
+
+#Concept and Template  
+
+## Install and library ggplot2
+
+
+```{r message=TRUE}
+#install.packages(c("ggplot2","tidyr","dplyr"))
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+## Introduction
+```{r echo=FALSE}
+library(knitr)
+library(png)
+library(grid)
+img <- readPNG("H:\\ggplot\\layers.png")
+grid.raster(img)
+```
+
+
+## First layer: Data
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Data:  資料來源，要對哪個data.frame畫圖？ ( [Iris data set](https://en.wikipedia.org/wiki/Iris_flower_data_set#Data_set) )  
+
+```{r}
+ggplot(data=iris)
+```
+
+## Second layer: Aesthetics
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Aesthetic: 美學對應，指定data set和圖形的對應關係  
+
+```{r}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))
+```
+
+## Third layer: Geommetries  
+
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Geometries: 幾何圖案，要用哪種幾何圖形繪圖？(點, 線, bar, ...)  
+
+```{r}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()
+```
+
+## Forth layer: Facets
+
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Facets: (多個)繪圖平面  
+
+```{r}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species)
+```
+
+## Fifth layer: Statistics  
+
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Statistics: 將data轉換成哪種統計量在繪圖？  
+
+```{r}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species)+
+        stat_smooth(method="lm", se=F, col="red")
+```
+
+## Sixth layer: Coordinates  
+
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Coordinates: 座標系統，哪種座標系？x軸、y軸的設定？  
+
+```{r }
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species)+
+        stat_smooth(method="lm", se=F, col="red")+
+        scale_y_continuous(name = "Sepal Width (cm)", limits=c(2,5))+
+        scale_x_continuous(name = "Sepal Length (cm)", limits=c(4,8))+
+        coord_equal()
+```
+
+## Seventh layer: Theme
+
+```{r echo=FALSE}
+grid.raster(img)
+```
+
+----
+
+Theme: 主題，所有與資料本身無關的繪圖細節  
+
+```{r eval=FALSE}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species)+
+        stat_smooth(method="lm", se=F, col="red")+
+        scale_y_continuous(name = "Sepal Width (cm)", limits=c(2,5))+
+        scale_x_continuous(name = "Sepal Length (cm)", limits=c(4,8))+
+        coord_equal()+
+        theme(panel.background = element_blank(),
+              plot.background = element_blank(),
+              legend.background = element_blank(),
+              legend.key = element_blank(),
+              strip.background = element_blank(),
+              axis.text = element_text(colour = "black"),
+              axis.ticks = element_line(colour = "black"),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              axis.line = element_line(colour = "black"),
+              strip.text = element_blank(),
+              panel.margin = unit(1, "lines")
+ )
+```
+
+---
+
+```{r echo=FALSE}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species)+
+        stat_smooth(method="lm", se=F, col="red")+
+        scale_y_continuous(name = "Sepal Width (cm)", limits=c(2,5))+
+        scale_x_continuous(name = "Sepal Length (cm)", limits=c(4,8))+
+        coord_equal()+
+        theme(panel.background = element_blank(),
+              plot.background = element_blank(),
+              legend.background = element_blank(),
+              legend.key = element_blank(),
+              strip.background = element_blank(),
+              axis.text = element_text(colour = "black"),
+              axis.ticks = element_line(colour = "black"),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              axis.line = element_line(colour = "black"),
+              strip.text = element_blank(),
+              panel.margin = unit(1, "lines")
+ )
+```
+
+
+#Preprocessing Categorical Variables  
+
+## Categorical variable, factor, and levels  
+
+以iris為例，觀察唯一的categorical variable: Species
+
+```{r}
+class(iris$Species)
+```
+
+觀察level的數量、標籤、以及排序情形
+```{r}
+levels(iris$Species)
+```
+
+----
+
+## Categorical variable, factor, and levels  
+  
+觀察一下facet的排列：    
+
+```{r fig.height=2, fig.width=4}
+ggplot(data=iris, 
+       aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species)+
+        stat_smooth(method="lm", se=F, col="red")
+```
+
+
+----
+
+觀察一下bar chart的排列：  
+```{r fig.height=3, fig.width=5}
+ggplot(data=iris,
+       aes(x=Species))+
+        geom_bar()
+```
+
+
+---
+
+## Why bother?  
+
+* level的順序，就是圖形排列的順序    
+* 想要把圖形重新排列，就要把level重新排列  
+* 介紹一個好用的package: $\color{red}{\text{forcats}}$  
+* $\color{red}{\text{forcats}}$ 就是 $\color{red}{\text{for\ cat}}$egorical的意思，裡面有許多好用的function  
+* 不用install & library了，它就在`tidyverse`裡面  
+
+---
+
+##法一：自己手動調整順序  
+
+* 使用 fct_relevel(fct變數, new.order) 
+* e.g. new.order=c("versicolor","setosa","verginica")  
+
+```{r}
+new.order <- c("versicolor","setosa","virginica")
+test <- fct_relevel(iris$Species, new.order)
+levels(test)
+```
+
+---
+   
+   
+* 連結一下之前教的`dplyr`:    
+
+```{r}
+iris2 <- iris %>% 
+        mutate(Species2=fct_relevel(Species, new.order))
+levels(iris2$Species2)
+```
+
+---
+  
+    
+* 一氣呵成，把圖也一起畫出來:    
+```{r}
+iris %>% 
+        mutate(Species2=fct_relevel(Species, new.order)) %>%
+        ggplot(aes(x=Sepal.Length, y=Sepal.Width))+
+        geom_point()+
+        facet_grid(.~Species2)
+```
+
+
+---
+  
+  
+* 再練一次，這次換bar chart:  
+```{r}
+iris %>% 
+        mutate(Species2=fct_relevel(Species, new.order)) %>%
+        ggplot(aes(x=Species2))+
+        geom_bar()
+```
+
+
+##法二：依照某個數值變項的大小調整順序  
+  
+* 再看一種圖形：side-by-side boxplot:  
+
+```{r}
+ggplot(data=iris,
+       aes(x=Species, y=Sepal.Width))+
+        geom_boxplot()
+```
+
+---
+
+* 三種花的Sepal.Width中位數是"versicolor" < "virginica" < "setosa"  
+* 那如何讓box plot照這個順序排列？    
+* `fct_reorder(fct變數, numeric變數, function)`  
+* `fct_reorder(Species, Sepal.Width, fun=median)`  
+
+```{r}
+test2 <- fct_reorder(iris$Species, iris$Sepal.Width,median)
+levels(test2)
+```
+
+---
+  
+
+```{r}
+iris %>%
+        mutate(Species3=fct_reorder(Species, Sepal.Width, median)) %>%
+        ggplot(aes(x=Species3, y=Sepal.Width))+
+        geom_boxplot()
+```
+
+---
+
+* 小技巧，把`forcats`的指令寫在`ggplot`裡就好了：  
+
+```{r fig.height=3, fig.length=5}
+ggplot(iris, 
+       aes(x=fct_reorder(Species,Sepal.Width,median), y=Sepal.Width))+
+        geom_boxplot()
+```
+  
+* 只剩下那個醜翻天的x-label，這我們等等的課程再來處理  
+
+```{r fig.height=3, fig.length=5}
+ggplot(iris, 
+       aes(x=fct_reorder(Species,Sepal.Width,median), y=Sepal.Width))+
+        geom_boxplot() + xlab("Species") + ylab("Width") + theme_classic()
+```
+
+#Wrap up  
+## Summary  
+1. The concept and template of ggplot2  
+```{r eval=FALSE}
+ggplot(data=iris,  
+       aes(x=Sepal.Length, y=Sepal.Width))+  
+        geom_point()+  
+        facet_grid(.~Species)+  
+        stat_smooth(method="lm", se=F, col="red")+  
+        scale_y_continuous(name = "Sepal Width (cm)", limits=c(2,5))+  
+        scale_x_continuous(name = "Sepal Length (cm)", limits=c(4,8))+  
+        coord_equal()+  
+        theme()
+```
+  
+2. Preprocessing Categorical Variables  
+```{r eval=FALSE}
+fct_relevel(iris$Species, c("versicolor","setosa","virginica"))
+fct_reorder(iris$Species, iris$Sepal.Width,median)
+```

@@ -1,0 +1,15 @@
+\contentsline {section}{單變數探索}{6}{section*.2}%
+\contentsline {subsection}{marginal distribution(連續型)？}{6}{section*.3}%
+\contentsline {subsection}{marginal distribution(離散型)？}{10}{section*.4}%
+\contentsline {subsection}{離散型變數的level排序？}{17}{section*.5}%
+\contentsline {subsection}{wrap up}{21}{section*.6}%
+\contentsline {section}{雙變數探索}{22}{section*.7}%
+\contentsline {subsection}{變數間的comparison(連續\textbar 離散)？}{22}{section*.8}%
+\contentsline {subsection}{變數間的relationship(間斷vs間斷)？}{30}{section*.9}%
+\contentsline {subsection}{變數間的relationship(連續vs連續)？}{33}{section*.10}%
+\contentsline {subsection}{變數間的relationship(順序vs順序)？}{36}{section*.11}%
+\contentsline {subsection}{wrap up}{41}{section*.12}%
+\contentsline {section}{三變數探索}{42}{section*.13}%
+\contentsline {subsection}{bar plot 加入第三維資訊}{49}{section*.14}%
+\contentsline {section}{四變數以上探索}{52}{section*.15}%
+\contentsline {section}{Lattice簡介}{55}{section*.16}%

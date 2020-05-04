@@ -1,0 +1,142 @@
+\documentclass[12pt]{beamer}
+
+\usetheme[secheader]{Boadilla}
+\usefonttheme{professionalfonts}
+
+% 若有中文
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{微軟正黑體}
+% 這兩行一定要加，中文才能自動換行
+\XeTeXlinebreaklocale "zh" 
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumerate}
+\usepackage{caption,graphicx}
+\usepackage{subfigure}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\setbeamertemplate{navigation symbols}{}
+\title{\LaTeX Demo}
+\author{Statistical Computing}
+\date{March 3, 2020}
+
+%--------------------------------------------------------	
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+%%%%% page 3 %%%%%
+\section{itemize and enumerate}
+\begin{frame}{itemize and enumerate}
+	By itemize,
+	\begin{itemize}
+		\item abc
+		\item def
+		\item ghi
+	\end{itemize}
+
+	By enumerate,
+	\begin{enumerate}[1]
+		\item abc
+		\item def
+		\item ghi
+	\end{enumerate}
+\end{frame}
+
+%%%%% page 4 %%%%%
+\section{array, pmatrix and cases}
+\begin{frame}{array, pmatrix and cases}
+	By array,
+	$$ \left( \begin{array}{cccccc}
+	1 & 2 & 3 & 1 & 2 & 3 \\
+	4 & 5 & 6 & 4 & 5 & 6 \\
+	7 & 8 & 9 & 7 & 8 & 9
+	\end{array} \right) $$
+
+	By pmatrix,
+	$$ \begin{pmatrix}
+	1 & 2 & 3 & 1 & 2 & 3 \\
+	4 & 5 & 6 & 4 & 5 & 6 \\
+	7 & 8 & 9 & 7 & 8 & 9
+	\end{pmatrix}$$
+
+	By array,
+	$$|x| = \left\{ \begin{array}{rr}
+	x,  & \mbox{if $x \geq 0$} \\
+	-x, & \mbox{if $x < 0$}
+	\end{array} \right.$$
+
+	By cases,
+	$$ |x|=
+	\begin{cases}
+	x,  & \mbox{if $x \geq 0$} \\
+	-x, & \mbox{if $x < 0$}
+	\end{cases}$$
+\end{frame}
+
+%%%%% page 5 %%%%%
+\section{math mode}
+\begin{frame}{math mode}
+	\begin{itemize}
+		\item $ \alpha, \beta, \gamma, \Gamma, \zeta, \eta, \sigma, \Sigma $
+		\item $ \displaystyle \lim_{x \to a} f(x) $
+		\item $ f^\prime(x) $
+		\item $ \displaystyle \int_a^b f(x) dx $
+		\item $ \sqrt{x^2+3} $
+		\item $ \sin, \cos, \log, \ln $
+		\item $ \dfrac{x-1}{x+1} $
+	\end{itemize}
+\end{frame}
+
+%%%%% page 6 %%%%%
+\section{align}
+\begin{frame}{align}
+	\begin{align}
+		\alpha &= a + b - c \\
+		\beta  &= 2c
+	\end{align}
+
+	\begin{align*}
+		\alpha &= a + b - c \\
+			   &= 2c \\
+			   &= 5
+	\end{align*}
+
+	\begin{equation} \begin{split}
+		\alpha &= a + b - c \\
+		\beta  &= 2c
+	\end{split} \end{equation}
+\end{frame}
+
+%%%%% page 7 %%%%%
+\section{tabular and graphic}
+\begin{frame}{tabular and graphic}
+\begin{center}  % 置中
+\begin{tabular}{ccc}
+	\toprule[2pt]
+	Jan. & Feb. & Mar. \\
+	\midrule[1pt]
+	2 & 0 & 3 \\
+	1 & 4 & 7 \\
+	\bottomrule[2pt]
+\end{tabular}
+\end{center}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=1.5]{NTHU.jpg}
+\caption{國立清華大學}
+\end{center}
+\end{figure}
+\end{frame}
+
+\end{document}
