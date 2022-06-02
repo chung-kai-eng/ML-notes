@@ -41,8 +41,81 @@ drop_quasi.fit_transform(training_data)
 ### Sum coding
 - when doing train_test_split (sometimes there might be some categories not in training set but in testing set). In this situation, sum coding method is good for estimate the effect of each categories
 
+### Mean Encoding
+- replace categorical feature with the mean of y
+- usage time: when categorical variable is significantly correlated to y
+- when the sample size is not large, the mean result might have large bias. In this situation, smoothing approach can be utilized
+- easy to overfitting (careful to use)
 
-- using column transformer to make pipeline 
+```python=
+data = pd.concat([df[:train_num], train_y], axis=1)
+for col in df.columns:
+    mean_df = data.groupby([col])['target'].mean().reset_index()
+    mean_df.columns = [c, f'{c}_mean']
+    data = pd.merge(data, mean_df, on=col, how='left')
+    data = data.drop([c], axis=1)
+data = data.drop(['target'], axis=1)
+```
+
+### Count Encode
+- when the number of categorical features show is (pos/neg) correlated to mean
+
+```python=
+count_df = df.groupby(['Ticket'])['Name'].agg({'Ticket_Count':'size'}).reset_index()
+df = pd.merge(df, count_df, on=['Ticket'], how='left')
+```
+
+### Group Encode
+- Group by encoding: categorical and numerical features can be used to combine new feature
+    - common aggregation: ```mean, median, mode, min, max, count```
+- Compare with mean encode
+
+|              | Mean Encode    | Group Encode   |
+| ------------ | -------------- | -------------- |
+| mean feature | target feature | Other features |
+| Smoothing    | required       | not required   |
+
+```python=
+# 取船票票號(Ticket), 對乘客年齡(Age)做群聚編碼
+df['Ticket'] = df['Ticket'].fillna('None')
+df['Age'] = df['Age'].fillna(df['Age'].mean())
+
+mean_df = df.groupby(['Ticket'])['Age'].mean().reset_index()
+mode_df = df.groupby(['Ticket'])['Age'].apply(lambda x: x.mode()[0]).reset_index()
+median_df = df.groupby(['Ticket'])['Age'].median().reset_index()
+max_df = df.groupby(['Ticket'])['Age'].max().reset_index()
+min_df = df.groupby(['Ticket'])['Age'].min().reset_index()
+temp = pd.merge(mean_df, mode_df, how='left', on=['Ticket'])
+temp = pd.merge(temp, median_df, how='left', on=['Ticket'])
+temp = pd.merge(temp, max_df, how='left', on=['Ticket'])
+temp = pd.merge(temp, min_df, how='left', on=['Ticket'])
+temp.columns = ['Ticket', 'Age_Mean', 'Age_Mode', 'Age_Median', 'Age_Max', 'Age_Min']
+temp.head()
+```
+
+### Time series feature (periodic)
+- year = Cos((month/6+day/180)$\pi$)
+- week = Sin((what day is today/3.5 + hour/84)$\pi$)
+- day = Sin((hour/12-minute/720+second/43200)$\pi$)
+```python=
+# extract year, month, day, hour, ...
+df['pickup_datetime'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S UTC'))
+df['pickup_year'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%Y')).astype('int64')
+df['pickup_month'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%m')).astype('int64')
+
+# periodic feature
+import math
+df['day_cycle'] = df['pickup_hour']/12 + df['pickup_minute']/720 + df['pickup_second']/43200
+df['day_cycle'] = df['day_cycle'].map(lambda x:math.sin(x*math.pi))
+
+df['year_cycle'] = df['pickup_month']/6 + df['pickup_day']/180
+df['year_cycle'] = df['year_cycle'].map(lambda x:math.cos(x*math.pi))
+df['week_cycle'] = df['pickup_dow']/3.5 + df['pickup_hour']/84
+df['week_cycle'] = df['week_cycle'].map(lambda x:math.sin(x*math.pi))
+```
+
+
+Using column transformer to make pipeline 
 ```python=
 def preprocessing(self):
     numeric_transformer = Pipeline(steps = [('scaler', StandardScaler())])
