@@ -278,6 +278,8 @@ plt.show()
 
 - ```Level 0 (base models)``` : the training dataset as the input to make prediction
 - ```Level 1 (meta model)``` : take the output of level 0 models as input and the single level 1 model, meta_learner, learns to make prediction from the data
+- ```passthrough=False```: 不將input (x) 也丟進去meta-model 內，若為```True```，則連同x input一起丟到meta model 中 (x + predict的結果)
+- k-fold實際上，1~k-1拿來訓練training dataset，第k fold會餵進去train好的base model進行prediction，拿prediction的結果餵到meta model內進行meta model 的訓練
 
 - list of tuple for constructing base model
 [python ensemble learning introduction](https://machinelearningmastery.com/super-learner-ensemble-in-python/)
@@ -315,6 +317,12 @@ print("R2: %.3f" % r2_score(y_test, y_pred))
 - better results have been seen when using the prediction of class probabilities as input ot the meta-learner instead of labels
 
 
+## Blending
+- weighted different models' prediction ($\Sigma_i w_i=1$ or voting)
+- single model should have high performance
+```python=
+blending_pred = lr_pred*coef[0]  + gdbt_pred*coef[1] + rf_pred*coef[2]
+```
 
 ## Quantile Regression
 ### quantile loss
