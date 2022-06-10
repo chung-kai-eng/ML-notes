@@ -43,6 +43,9 @@ Machine Learning Note
 - [sktime](https://github.com/alan-turing-institute/sktime): time series classification, regression
 - [HMMLearn](https://github.com/hmmlearn/hmmlearn): Implementation of hidden markov models
 
-
+### AutoML
+- [auto-sklearn](https://github.com/automl/auto-sklearn/)
+- [Compose, Featuretools, EvalML]()
+- [tpot](https://github.com/EpistasisLab/tpot)
 
 [Scikit Learn related projects](https://scikit-learn.org/stable/related_projects.html)
