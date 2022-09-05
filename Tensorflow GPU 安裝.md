@@ -3,7 +3,7 @@
 1. Uninstall Tensorflow CPU version
 2. Install CUDA
 3. Install cuDNN (Need to register first)
-4. conda install -c conda-forge tensorflow-gpu==<version>
+4. ```conda install -c conda-forge tensorflow-gpu==<version>```
 5. Check whether installation is successful
 
 
