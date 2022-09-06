@@ -17,6 +17,9 @@ Machine Learning Note
     - ```Compose``` automates prediction engineering
 - [feature-engine](https://github.com/solegalli/feature_engine)
 - [imbalance](https://github.com/scikit-learn-contrib/imbalanced-learn): deal with imbalance data issue
+    - [```sklearn resample```](https://scikit-learn.org/stable/modules/generated/sklearn.utils.resample.html)
+    - [```tensorflow tf.data_sampler```](https://www.tensorflow.org/tutorials/structured_data/imbalanced_data#using_tfdata)
+    - [```pytorch torch.utils.data.WeightedRandomSampler```](https://pytorch.org/docs/stable/data.html#torch.utils.data.WeightedRandomSampler)
 
 ### Feature selection
 - [feature-engine](https://github.com/solegalli/feature_engine)
