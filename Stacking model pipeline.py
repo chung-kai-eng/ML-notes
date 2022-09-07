@@ -28,7 +28,8 @@ linear_preprocessor = make_column_transformer(
     (num_linear_processor, num_feats), (cat_linear_processor, cat_feats)
 )
 
-# 分別建構 base learner
+# 若preprocess 相同就只需要建構model base model > meta model
+# 分別建構 base learner 的 preprocess
 lasso_pipeline = make_pipeline(linear_preprocessor, LassoCV())
 rf_pipeline = make_pipeline(
     tree_preprocessor, RandomForestRegressor(random_state=42))
