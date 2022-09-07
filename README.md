@@ -51,4 +51,9 @@ Machine Learning Note
 - [Compose, Featuretools, EvalML]()
 - [tpot](https://github.com/EpistasisLab/tpot)
 
+
+### Anomaly detection
+- [PyOD](https://github.com/yzhao062/pyod)
+
+
 [Scikit Learn related projects](https://scikit-learn.org/stable/related_projects.html)
