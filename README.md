@@ -16,6 +16,9 @@ Machine Learning Note
     - ```EvalML``` automates model building, includes data checks, and even offers tools for model understanding [(Tutorial)](https://evalml.alteryx.com/en/stable/demos/fraud.html)
     - ```Compose``` automates prediction engineering
 - [feature-engine](https://github.com/solegalli/feature_engine)
+    - Variable transformation, selection, preprocessing
+    - Imputatoin, Encoding, Discretization, Outlier Handling
+    - Time series features
 - [imbalance](https://github.com/scikit-learn-contrib/imbalanced-learn): deal with imbalance data issue
     - [```sklearn resample```](https://scikit-learn.org/stable/modules/generated/sklearn.utils.resample.html)
     - [```tensorflow tf.data_sampler```](https://www.tensorflow.org/tutorials/structured_data/imbalanced_data#using_tfdata)
