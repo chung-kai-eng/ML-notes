@@ -56,7 +56,8 @@ Machine Learning Note
 
 
 ### Anomaly detection
-- [PyOD](https://github.com/yzhao062/pyod)
+- [PyOD for tabular dataset](https://github.com/yzhao062/pyod)
+- [TODS for time seires](https://github.com/datamllab/tods)
 
 
 [Scikit Learn related projects](https://scikit-learn.org/stable/related_projects.html)
