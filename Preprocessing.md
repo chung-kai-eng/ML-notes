@@ -2,10 +2,13 @@
 
 Preprocessing
 ===
-
-[machine learning issue and solution](https://machinelearningmastery.com/faq/single-faq/what-feature-selection-method-should-i-use/)
-[cheat sheet for pandas](http://datacamp-community-prod.s3.amazonaws.com/d4efb29b-f9c6-4f1c-8c98-6f568d88b48f)
-[Framework for data preparation](https://machinelearningmastery.com/framework-for-data-preparation-for-machine-learning/)
+- [Way to do transformation](https://trainindata.medium.com/variance-stabilizing-transformations-in-machine-learning-20e5383862dd)
+    - Whether to do transformation (Box-cox transform...)
+    - In general, models like tree-based, NN, nearest neightbors (non-linear models) don't need to transform variables.
+    - When doing transformation, remember to plot the comparison between before and after to check whether it is as your expect.
+- [machine learning issue and solution](https://machinelearningmastery.com/faq/single-faq/what-feature-selection-method-should-i-use/)
+- [cheat sheet for pandas](http://datacamp-community-prod.s3.amazonaws.com/d4efb29b-f9c6-4f1c-8c98-6f568d88b48f)
+- [Framework for data preparation](https://machinelearningmastery.com/framework-for-data-preparation-for-machine-learning/)
 ![](https://i.imgur.com/vZnNYhQ.png)
 
 ## ```String``` find, split
@@ -15,7 +18,7 @@ Preprocessing
 - [feature engine library for preprocessing](https://feature-engine.readthedocs.io/en/1.1.x/)
     - include feature selection , missing value imputation, outlier handling, variable transformation, variable discretization
 
-### drop quasi-constant features (filter out features with 99% same value)
+### Drop quasi-constant features (filter out features with 99% same value)
 ```python=
 from feature_engine.selection import DropDuplicateFeatrues, DropConstantFeatures
 
@@ -23,9 +26,66 @@ drop_quasi = DropDuplicateFeatrues(tol=0.99, variables=None, missing_values='rai
 drop_quasi.fit_transform(training_data)
 ```
 
+### Bimarize the skewed numerical features
+- For some variables very skewed, we can try to transform those into binary variables
+
+```python=
+from sklearn.preprocessing import Binarizer
+from feature_engine.wrappers import SklearnTransformerWrapper
+
+
+skewed_feats = ['feat_1', 'feat_2']
+
+# method 1
+binarizer = SklearnTransformerWrapper(
+    transformer=Binarizer(threshold=0), variables=skewed_feats
+)
+
+# method 2
+binarizer = Binarizer(threshold=0)
+X_train = binarizer.fit_transform(X_train[skewed_feats])
+X_test = binarizer.transform(X_test)
+```
+
 
 ## model storage file type
 ![](https://i.imgur.com/9Voq4TZ.png)
+
+## Categorical Variable
+- transform **rare categories** into one category ("Rare"), which the high dimension categorical variable with imbalance will damage tree based models
+```python=
+class RareLabelCategoricalEncoder(BaseEstimator, TransformerMixin):
+    """Groups infrequent categories into a single string"""
+
+    def __init__(self, tol=0.05, variables):
+
+        if not isinstance(variables, list):
+            raise ValueError('variables should be a list')
+        
+        self.tol = tol
+        self.variables = variables
+
+    def fit(self, X, y=None):
+        # persist frequent labels in dictionary
+        self.encoder_dict_ = {}
+
+        for var in self.variables:
+            # the encoder will learn the most frequent categories
+            t = pd.Series(X[var].value_counts(normalize=True) 
+            # frequent labels:
+            self.encoder_dict_[var] = list(t[t >= self.tol].index)
+
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        for feature in self.variables:
+            X[feature] = np.where(
+                X[feature].isin(self.encoder_dict_[feature]),
+                                X[feature], "Rare")
+
+        return X
+```
 
 ## Encoded
 - [category encoder](https://contrib.scikit-learn.org/category_encoders/)
@@ -92,6 +152,7 @@ temp = pd.merge(temp, min_df, how='left', on=['Ticket'])
 temp.columns = ['Ticket', 'Age_Mean', 'Age_Mode', 'Age_Median', 'Age_Max', 'Age_Min']
 temp.head()
 ```
+
 
 ### Time series feature (periodic)
 - year = Cos((month/6+day/180)$\pi$)
@@ -564,3 +625,61 @@ print(gower_matrix(df))
     - $F=\frac{n_1+n_2-p-1}{p(n_1+n_2-2)}T^2$
 - difficulty: calculate mahalanobis distance
 - after doing Hotelling's T2, do t-test seperately
+
+
+## Customize the prerpocessing step
+- use Parent class: [base & TransformerMixin](https://scikit-learn.org/stable/modules/classes.html)
+    - base.BaseEstimator: base class for all estimators in sklearn
+    - base.TransfromerMixin: Mixin class for all transformers in sklearn
+    
+```python=
+# Parent class
+class TransformerMixin:
+    def __init__(self, X, y=None):
+        X = self.fit(X, y).tranform(X)
+        return X    
+```
+
+```python=+
+from sklearn.base import BaseEstimator, TransformerMixin
+
+class MeanImputer(TransformerMixin):
+    def __init__(self, variables):
+        self.variables = variables
+    
+    def fit(self, X, y=None):
+        self.imputer_dict_ = X[self.variables].mean().to_dict()
+        return self
+    
+    def transform(self, X):
+        for x in self.variables:
+            X[x] = X[x].fillna(self.imputer_dict_[x])
+        return X
+ 
+
+class TemporalVariableTransformer(BaseEstimator, TransformerMixin):
+	# Temporal elapsed time transformer
+
+    def __init__(self, variables, reference_variable):
+        
+        if not isinstance(variables, list):
+            raise ValueError('variables should be a list')
+        
+        self.variables = variables
+        self.reference_variable = reference_variable
+
+    def fit(self, X, y=None):
+        # we need this step to fit the sklearn pipeline
+        return self
+
+    def transform(self, X):
+
+    	# so that we do not over-write the original dataframe
+        X = X.copy()
+        
+        for feature in self.variables:
+            X[feature] = X[self.reference_variable] - X[feature]
+
+        return X
+
+```
