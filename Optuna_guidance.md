@@ -6,9 +6,9 @@ Optuna
 - Optuna can use any python syntax to set up search space (e.g. ```.yml```, ```dict```)
 <img src=https://user-images.githubusercontent.com/54303314/193978439-d7a86648-6c28-4e26-904b-2e207fc1162a.png width="800" height="450">
 
-
-Samplers & pruning
-
+# Hyperparameter algorithm containes two parts of strategy 
+1. Sampling Strategy 
+2. Pruning Strategy
 
 ## Samplers
 - [Overview](https://optuna.readthedocs.io/en/stable/tutorial/10_key_features/003_efficient_optimization_algorithms.html#sphx-glr-tutorial-10-key-features-003-efficient-optimization-algorithms-py)
@@ -93,4 +93,4 @@ def objective(trial):
 <img src=https://user-images.githubusercontent.com/54303314/193975227-5e4fc778-7c9b-4159-858d-a0a4a42919b3.png width="900" height="250">
 
 
-reference: [ref](https://optuna.readthedocs.io/en/stable/tutorial/index.html)
+Reference: [ref](https://optuna.readthedocs.io/en/stable/tutorial/index.html)
