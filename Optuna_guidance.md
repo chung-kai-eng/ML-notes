@@ -17,7 +17,8 @@ Optuna
 ### Model-based 
 1. TPE: kernel fitting (tree-based estimator which can deal with both numerical and categorical features)
 2. GP: Gaussian process (suitable for numerical features)
-3. CMA-ES (covariant matrix adaptation-evolution strategy): meta-heuristics algorithm for continuous space
+3. CMA-ES (covariant matrix adaptation-evolution strategy): meta-heuristics algorithm for continuous space (a kind of Genetic algorithm)
+4. Simulated Annealing
 
 ### Other method
 1. Random Search
@@ -25,7 +26,9 @@ Optuna
 3. User-defined algorithm
 
 <img src=https://user-images.githubusercontent.com/54303314/193965369-15ef0332-a00b-41df-984c-7769f49f3a77.png width="500" height="270">
-
+- A **hybrid sampler** largely improves optimization performance (```TPE``` then ```CMA-ES```)
+    - Step 1: Global search with TPE
+    - Step 2: Local search with CMA-ES
 
 ## Pruning Strategy (a.k.a. automated early stopping)
 - Stop unpromising trials based on learning curve (can let computing resource dedicate to more promising trials)
@@ -94,3 +97,7 @@ def objective(trial):
 
 
 Reference: [ref](https://optuna.readthedocs.io/en/stable/tutorial/index.html)
+
+- Complementary: [Specify hyperparameter manually](https://optuna.readthedocs.io/en/stable/tutorial/20_recipes/008_specify_params.html)
+    - Passing those sets of hyperparameters and let Optuna evaluate them - ```enqueue_trial()```
+    - Adding the results of those sets as completed Trials - ```add_trial()```
