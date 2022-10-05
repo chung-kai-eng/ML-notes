@@ -41,7 +41,7 @@ Machine Learning Note
 - [sklearn-deap](https://github.com/rsteca/sklearn-deap): Use evolutionary algorithms instead of gridsearch in scikit-learn.
 - [hyperopt](https://github.com/hyperopt/hyperopt): bayesian hyperparameter
 - [scikit-optimize](https://scikit-optimize.github.io/stable/): scikit learn hyperparamter
-- [Optuna](https://github.com/optuna/optuna)
+- [Optuna](https://github.com/optuna/optuna): [Guidance for Optuna](https://github.com/chung-kai-eng/Eric/blob/master/Optuna_guidance.md)
 
 
 ### Time series
