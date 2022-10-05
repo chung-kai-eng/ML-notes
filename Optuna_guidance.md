@@ -1,6 +1,12 @@
 Optuna
 ===
 
+## Comparison between ```Hyperopt``` and ```Optuna```
+- Hyperopt should **predefine the search space** using **dictionary** to setup
+- Optuna can use any python syntax to set up search space (e.g. ```.yml```, ```dict```)
+<img src=https://user-images.githubusercontent.com/54303314/193978439-d7a86648-6c28-4e26-904b-2e207fc1162a.png width="800" height="450">
+
+
 Samplers & pruning
 
 
@@ -59,7 +65,7 @@ def objective(trial):
     - For ```TPESampler```,  ```Hyberband``` is the best
     - [Ref](https://github.com/optuna/optuna/wiki/Benchmarks-with-Kurobako)
 - For deep learning tasks,
-![image](https://user-images.githubusercontent.com/54303314/193974702-bd8ee28a-b381-40b2-a217-1a199af54174.png)
+<img src=https://user-images.githubusercontent.com/54303314/193975227-5e4fc778-7c9b-4159-858d-a0a4a42919b3.png width="900" height="250">
 
 
 reference: [ref](https://optuna.readthedocs.io/en/stable/tutorial/index.html)
