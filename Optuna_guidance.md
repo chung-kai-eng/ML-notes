@@ -65,6 +65,11 @@ def objective(trial):
 - Another way to set up hyperparameter (using dictionary)
 ```python=
 # model can be seperated from objective using the example shown below
+def make_model():
+    # construct your model
+    
+    return model
+
 def return_score(param):
     model = xgb.XGBRegressor(**param)  
     rmse = -np.mean(model_selection.cross_val_score(model,X_train[:1000],y_train[:10000], cv = 4, n_jobs =-1,scoring='neg_root_mean_squared_error'))
@@ -101,3 +106,9 @@ Reference: [ref](https://optuna.readthedocs.io/en/stable/tutorial/index.html)
 - Complementary: [Specify hyperparameter manually](https://optuna.readthedocs.io/en/stable/tutorial/20_recipes/008_specify_params.html)
     - Passing those sets of hyperparameters and let Optuna evaluate them - ```enqueue_trial()```
     - Adding the results of those sets as completed Trials - ```add_trial()```
+- [Hydra+Optuna+mlflow](https://medium.com/optuna/easy-hyperparameter-management-with-hydra-mlflow-and-optuna-783730700e7d)
+
+
+
+
+https://supikiti.notion.site/
