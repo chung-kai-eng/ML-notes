@@ -59,6 +59,31 @@ def objective(trial):
     return accuracy
 ```
 
+- Another way to set up hyperparameter (using dictionary)
+```python=
+# model can be seperated from objective using the example shown below
+def return_score(param):
+    model = xgb.XGBRegressor(**param)  
+    rmse = -np.mean(model_selection.cross_val_score(model,X_train[:1000],y_train[:10000], cv = 4, n_jobs =-1,scoring='neg_root_mean_squared_error'))
+    return rmse
+
+
+def objective(trial):
+    param = {
+                "n_estimators" : trial.suggest_int('n_estimators', 0, 500),
+                'max_depth':trial.suggest_int('max_depth', 3, 5),
+                'reg_alpha':trial.suggest_uniform('reg_alpha',0,6),
+                'reg_lambda':trial.suggest_uniform('reg_lambda',0,2),
+                'min_child_weight':trial.suggest_int('min_child_weight',0,5),
+                'gamma':trial.suggest_uniform('gamma', 0, 4),
+                'learning_rate':trial.suggest_loguniform('learning_rate',0.05,0.5),
+                'colsample_bytree':trial.suggest_uniform('colsample_bytree',0.4,0.9),
+                'subsample':trial.suggest_uniform('subsample',0.4,0.9),
+                'nthread' : -1
+            }
+    return(return_score(param)) # this will return the rmse score
+```
+
 ## Which Sampler and Pruner should be used?
 - For not deep learning tasks,
     - For ```RandomSampler```, ```MedianPruner``` is the best
