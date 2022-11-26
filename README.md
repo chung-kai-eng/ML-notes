@@ -60,4 +60,6 @@ Machine Learning Note
 - [TODS for time seires](https://github.com/datamllab/tods)
 - [Anomaly detection for different types of dataset](https://github.com/yzhao062)
 
+[Lazyprediction for lists of models](https://github.com/shankarpandala/lazypredict)
+
 [Scikit Learn related projects](https://scikit-learn.org/stable/related_projects.html)
