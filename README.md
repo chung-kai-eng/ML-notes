@@ -48,6 +48,7 @@ Machine Learning Note
 - [tslearn](https://github.com/tslearn-team/tslearn): time series preprocessing, feature extraction, classification, regression, clustering
 - [sktime](https://github.com/alan-turing-institute/sktime): time series classification, regression
 - [HMMLearn](https://github.com/hmmlearn/hmmlearn): Implementation of hidden markov models
+- [pytorchforecasting](https://pytorch-forecasting.readthedocs.io/en/stable/index.html): time series forecasting model implemented by pytorch
 
 ### AutoML
 - [auto-sklearn](https://github.com/automl/auto-sklearn/)
