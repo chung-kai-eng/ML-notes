@@ -78,3 +78,7 @@ Branch name rule: hotfix-*
     
 
 只是**一種規範**，讓整個團隊遵守某個工作流程的規範，比較不會發生問題。
+
+
+- HEAD, checkout, reset, revert
+  - [Concept about git](https://june.monster/git-github-checkout-reset-revert/)
