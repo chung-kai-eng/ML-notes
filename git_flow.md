@@ -78,3 +78,28 @@ Branch name rule: hotfix-*
     
 
 只是**一種規範**，讓整個團隊遵守某個工作流程的規範，比較不會發生問題。
+
+
+
+
+## Git: 回復到之前版本 (`checkout, reset, revert`)
+- **HEAD**: 一個指標，告訴我們現在在整個 git history 的哪個位置、哪個分支。HEAD 會指向當前分支最新的那個commit，但也可以讓HEAD 指向任何一個commit，這種情況我們稱為 **detached HEAD**
+```bash
+# 查看現在指向哪個位置
+cat .git/HEAD 
+
+# Output ref: refs/heads/feat/add_git_knowledge
+```
+- git checkout: `checkout` 就是移動 **HEAD** 的位置。
+    - 切換分支
+    - 切換位置 指向指定 commit id: **detached HEAD** 有點像是暫時的 branch，離開時就會被刪除
+```bash
+# 切換分支
+git checkout master
+git checkout feature
+
+# 切換到 commit id 的分支 (detached branch)
+git checkout be235gf
+```
+
+![detached HEAD example](./images/detached_head_example.png)
