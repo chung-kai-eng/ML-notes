@@ -90,7 +90,7 @@ cat .git/HEAD
 
 # Output ref: refs/heads/feat/add_git_knowledge
 ```
-- git checkout: `checkout` 就是移動 **HEAD** 的位置。
+### git checkout: `checkout` 就是移動 **HEAD** 的位置。
     - 切換分支
     - 切換位置 指向指定 commit id: **detached HEAD** 有點像是暫時的 branch，離開時就會被刪除
 ```bash
@@ -103,3 +103,37 @@ git checkout be235gf
 ```
 
 ![detached HEAD example](./images/detached_head_example.png)
+
+### git reset
+- `reset`: 一樣可以回到之前的版本，但不像 `checkout` 會開一個暫時的detached HEAD，他會實際把當下的branch 退回到你回到的地方 (移動 HEAD)。
+- Use Case: 做了一些程式改動，但因某些原因不想要了，但已經提交了幾個commit，這時就可以使用 `reset` 回到 commit 之前的版本
+```bash
+# ~n 表示回到 HEAD 的 前 n 版本
+git reset HEAD~1
+git reset HEAD~2
+
+# HEAD^ 表示 HEAD的前一個版本
+git reset HEAD^
+
+# 可以直接使用 commit id
+git reset be235gf
+```
+- 用了 `reset` 會察覺code 沒有改變，這是因為 git default 會做 `git reset --mixed xxx`。雖然commit回到過去的版本，但版本之後的這些改動並不會消失，而是回到working directory。是一種保護機制。
+- 若要真正回到過去某個 commit id，可以用 `git reset --hard xxx`。`hard` 部會把程式改動回 working directory
+
+### git revert
+- 跟 `checkout & reset` 又有些不同，他回復版本的方式並不是移動 `HEAD`，他會幫忙複製新的 commit，這個commit 會把我們要 `revert` 的 commit 的內容給逆向操作一遍。
+
+```bash
+git revert HEAD
+
+git revert be235gf
+```
+- Use Case: 通常個人project 有 `reset` 讓 commit history 看起來比較乾淨。`revert` 比較是使用在跟他人合作時，會共用repository，一但你的commit 推到`remote` 再用 `reset` 會改變本來branch history，會不太建議影響到其他人，所以此時用 `revert` 較為合適。
+- 在團隊當中可能有人程式改動造成嚴重bug 且沒辦法立刻找出原因的話，就會把有問題的commit 給 `revert` 達到 rollback 的效果。
+
+
+
+
+Reference:
+[Merge vs. Rebase](https://june.monster/git-merge-rebase/)
