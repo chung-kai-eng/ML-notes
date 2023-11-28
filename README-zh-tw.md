@@ -9,7 +9,7 @@
 - [集成學習](https://github.com/chung-kai-eng/Eric/blob/master/Ensemble%20Learning.md)
 - [評估指標](https://github.com/chung-kai-eng/Eric/blob/master/Evaluation%20Metrics.md)
 
-## 有用的套件
+## 相關套件
 
 ### 特徵工程
 - [Category Encoders](https://github.com/scikit-learn-contrib/category_encoders)：用於編碼分類變數
