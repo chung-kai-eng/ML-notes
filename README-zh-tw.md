@@ -65,12 +65,10 @@
 - [mlflow]()
 - [clearml]()
 - [wandb]()
-- [dvc]：命令行用法（不僅包括數據版本控制）
+- [dvc]()：命令行用法（不僅包括數據版本控制）
 - [comet]()
 - [Neptune.ai]()
 
-[Lazyprediction 用於模型列表](https://github.com/shankarpand
-
-ala/lazypredict)
+[Lazyprediction 用於模型列表](https://github.com/shankarpandala/lazypredict)
 
 [與Scikit Learn相關的項目](https://scikit-learn.org/stable/related_projects.html)
