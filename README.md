@@ -51,6 +51,7 @@ Machine Learning Note
 - [sktime](https://github.com/alan-turing-institute/sktime): time series classification, regression, clustering, annotation (also can be used in data that is univariate, multivariate or panel)
 - [HMMLearn](https://github.com/hmmlearn/hmmlearn): Implementation of hidden markov models
 - [pytorchforecasting](https://pytorch-forecasting.readthedocs.io/en/stable/index.html): time series forecasting model implemented by pytorch
+- [Nixtla](https://nixtlaverse.nixtla.io/#mlforecast): open-source libraries for time series forecasting (include 5 main libraries, `statsforecast`, `MLForecast`, `NeuralForecast`, `Hierarchical Forecast`, `TS features`)
 
 ### AutoML
 - [auto-sklearn](https://github.com/automl/auto-sklearn/)
