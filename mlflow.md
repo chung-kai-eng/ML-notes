@@ -97,7 +97,7 @@
   MODEL_UUID: str
   ```
 
-### MLflow in 
+### MLflow
 - Connect different parts using UUID for version control. Use **`MLflow tag`** to set up needed conditions for searching.
 - `client.search_experiments(filter_string)`: for experiment searching
   - name: experiment_name
@@ -106,3 +106,5 @@
   - name: model_name
   - tags.<tag_key>
 - view more about [client API](https://mlflow.org/docs/latest/python_api/mlflow.client.html)
+- [Overall example](./tutorial_note/mlflow_basic_operation.py)
+  - [Official example of pyfunc.PythonModel](./tutorial_note/basic-pyfunc.ipynb) &
