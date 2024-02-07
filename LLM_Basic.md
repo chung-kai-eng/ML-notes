@@ -58,7 +58,7 @@ $$
 
 ## Complementary
 
-- Jinja template
+### Jinja template
 
 ```python
 # more tour in https://realpython.com/primer-on-jinja-templating/
@@ -90,7 +90,62 @@ prompt = template.render(
 print(prompt)
 ```
 
+### Simple example
+- Build a simple app with the below tools
+  - Main tool: Langchain
+  - Search & retrieve: LLaMA Index (llama hub provides lots of data loader)
+  - VectorBase: Chromadb
+  - Model: OpenAI gpt3.5
+  - Embedding: text-embedding-ada-002
 
+```
+Set up Langchain: Follow the Langchain Quickstart Guide to install Langchain and understand its basic components, such as prompt templates, models, and output parsers.
 
+Integrate LLaMA Index: Use the LLaMA Index integration with Langchain to load data using a data loader from LLaMA Hub, index the data, and query it within a Langchain agent.
 
+Set up ChromaDB: ChromaDB is an open-source vector database that you can use to store and retrieve embeddings. Visit Chroma's website to learn how to set it up and integrate it with your application.
 
+Use OpenAI GPT-3.5: Utilize the OpenAI API to access the GPT-3.5 model for generating responses. You'll need to sign up for an API key and follow the OpenAI documentation for API usage.
+
+Generate Embeddings with text-embedding-ada-002: Use the OpenAI API to generate embeddings with the text-embedding-ada-002 model. These embeddings can be stored in ChromaDB and used for retrieval.
+```
+
+```python
+from langchain.llms import OpenAI
+from langchain.prompts import Prompt
+from langchain.on_demand_loaders import OnDemandLoaderTool
+from langchain.output_parsers import FirstOutputParser
+from chroma import ChromaDB
+
+# Initialize Langchain with OpenAI GPT-3.5
+gpt3 = OpenAI(api_key="your_openai_api_key")
+# Define a prompt template using Jinja
+prompt_template = Prompt("Hello, {{ name }}! How can I assist you today?")
+# Set up the LLaMA Index OnDemandLoaderTool
+llama_index_tool = OnDemandLoaderTool(loader_name="your_loader_name")
+# Set up ChromaDB for vector storage and retrieval
+chromadb = ChromaDB("your_chromadb_connection_string")
+# Define an output parser
+output_parser = FirstOutputParser()
+
+def generate_response(user_name, user_query):
+    # Use Langchain to construct the prompt
+    prompt = prompt_template.render(name=user_name)
+    # Retrieve relevant data from LLaMA Index
+    retrieved_data = llama_index_tool.query(user_query)
+    # Generate embeddings for the retrieved data and store them in ChromaDB
+    embeddings = gpt3.embed([retrieved_data])
+    chromadb.store_embeddings(embeddings)
+    # Use the embeddings to augment the prompt
+    augmented_prompt = f"{prompt}\n{retrieved_data}"
+    # Generate a response using GPT-3.5
+    response = gpt3(augmented_prompt)
+    # Parse the output to get the final response
+    final_response = output_parser.parse(response)
+    return final_response
+
+user_name = "Alice"
+user_query = "What's the latest news on climate change?"
+print(generate_response(user_name, user_query))
+
+```
