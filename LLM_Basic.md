@@ -48,6 +48,18 @@ $$
       cons:
     - context window limitation
 
+## dify (Do it for you)
+- an open source library for building LLM application
+  - View the technical spec first: [Link](https://docs.dify.ai/getting-started/readme/specifications-and-technical-features)
+- `Data Module`: [api/core/data_loader](https://github.com/langgenius/dify/tree/main/api/core/data_loader)
+  - check how to integrate with LLaMA hub (includes image data loader)
+- `Vector store module`: [api/core/vector_store](https://github.com/langgenius/dify/tree/main/api/core/vector_store)
+- `Embedding model`: [embedding model](https://github.com/langgenius/dify/tree/main/api/core/embedding)
+- `Model Module`" [Model Providers](https://docs.dify.ai/getting-started/readme/model-providers)
+### Further exploration
+- `Agent`: [api/core/agent/agent](https://github.com/langgenius/dify/tree/main/api/core/agent/agent)
+  - act as a Software Engineer, etc.
+
 ## Reference
 
 - [Quick tutorial about LLaMA cpp](https://www.datacamp.com/tutorial/llama-cpp-tutorial)
