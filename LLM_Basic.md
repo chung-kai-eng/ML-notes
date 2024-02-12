@@ -35,7 +35,7 @@ $$
       - template engine that allows for the dynamic generation of text-based formats such as HTML, XML, CSV, LaTeX, etc (also for prompt)
   - Formatting LLM output with **GBNF Grammars** [(Link)](https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md)
 
-## RAG
+## RAG & Vector Database (TODO: add the flow about RAG)
 
 - an advanced form of prompt engineering
 - Vector store is a key component of RAG
