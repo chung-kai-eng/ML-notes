@@ -42,6 +42,7 @@ $$
   - [Vector stores that LLaMA support](https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores.html)
     > pros:
   - no need to fine-tune again every time the new information is added
+  - Watch this (introduction)!!! [How **Chromadb** works?](https://realpython.com/chromadb-vector-database/)
   - stricter access control and more visible
     - better interpretability and observability metrics as you can look at the context if a response doesn't seem right
       cons:
