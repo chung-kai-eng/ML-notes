@@ -55,6 +55,9 @@ $$
 - [RAG & LLaMAIndex](https://christophergs.com/blog/ai-engineering-retrieval-augmented-generation-rag-llama-index#overview)
 - [LangChain with LLaMAIndex](https://medium.com/@zekaouinoureddine/bring-your-own-data-to-llms-using-langchain-llamaindex-3ddbac8cc9eb)
 - [RAG](https://christophergs.com/blog/ai-engineering-retrieval-augmented-generation-rag-llama-index)
+- [Dify](https://github.com/langgenius/dify/tree/main) 
+  - refer to the structure from `dify`
+  - log and api authorization
 
 ## Complementary
 
