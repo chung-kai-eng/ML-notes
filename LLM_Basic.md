@@ -38,6 +38,8 @@ $$
 ## RAG & Vector Database (TODO: add the flow about RAG)
 
 - an advanced form of prompt engineering
+- Flow
+\graphicspath { {/workspaces/ML-notes/images/RAG_workflow.webp} }
 - Vector store is a key component of RAG
   - [Vector stores that LLaMA support](https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores.html)
     > pros:
