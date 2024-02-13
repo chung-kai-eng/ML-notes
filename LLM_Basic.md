@@ -39,7 +39,10 @@ $$
 
 - an advanced form of prompt engineering
 - Flow
-\graphicspath { {/workspaces/ML-notes/images/RAG_workflow.webp} }
+  1. embed and store your documents in a ChromaDB collection
+  2. run a query like find and summarize semantically relevant documents through chromadb
+  3. pass the query and relevant documents to an LLM to generate a context-informed response.
+![rag workflow](/images/RAG_workflow.webp)
 - Vector store is a key component of RAG
   - [Vector stores that LLaMA support](https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores.html)
     > pros:
