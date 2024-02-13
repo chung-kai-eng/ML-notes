@@ -49,11 +49,11 @@ $$
     - context window limitation
 
 ## How to evaluate the LLM model performance
-1. Human Evaluation
-2. Automated Metrics:
+1. **Human Evaluation**
+2. **Automated Metrics**
   - `BLEU` (Bilingual Evaluation Understudy): originally designed for evaluating machine translation. BLEU measures how many words and phrases in tyhe generated text match a set of reference texts.
   - `ROUGE (Recall-oriented understudy for Gisting Evaluation)`: mainly used for summarization tasks, evaluating the overlap between the generated text and reference using measures like `recall, precision, and F1-score`.
-3. Ranking Evluation metrics for recommender system: [Link](https://towardsdatascience.com/ranking-evaluation-metrics-for-recommender-systems-263d0a66ef54)
+3. **Ranking Evaluation metrics for recommender system**: [(Link)](https://towardsdatascience.com/ranking-evaluation-metrics-for-recommender-systems-263d0a66ef54)
   - More about retrival and the final result:
     - `Hit ratio (HR)`
     - `Mean Reciprocal Rank (MRR)`: enhance MRR could involve the use of rerankers, which refine the order of retrieved documents.
@@ -62,7 +62,8 @@ $$
   - More about response evaluation:
     - `Faithfulness`: measure if the response from a query engine matches any source nodes which is useful for measuring if the response if hallucinated
     - `Relevancy Evaluator`: measures if the response + source nodes (retrieved context) match the query.
-4. Check LLaMA index evaluation metrics   
+- Check LLaMA index evaluation metrics here 
+  - [1](https://cookbook.openai.com/examples/evaluation/evaluate_rag_with_llamaindex#question-context-pair-generation), [2](https://docs.llamaindex.ai/en/stable/module_guides/evaluating/root.html)
 
 ### How to evaluate RAG
 - mainly focus on two critical aspects
