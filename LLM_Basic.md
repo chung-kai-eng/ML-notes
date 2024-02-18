@@ -34,15 +34,18 @@ $$
     - use JinJa Templates [(Link)](https://jinja.palletsprojects.com/en/3.1.x/)
       - template engine that allows for the dynamic generation of text-based formats such as HTML, XML, CSV, LaTeX, etc (also for prompt)
   - Formatting LLM output with **GBNF Grammars** [(Link)](https://github.com/ggerganov/llama.cpp/blob/master/grammars/README.md)
+- LeaderBoard from Hugging Face [(Link)](https://huggingface.co/spaces/mteb/leaderboard)
+  - select the model in different use case
 
 ## RAG & Vector Database (TODO: add the flow about RAG)
 
 - an advanced form of prompt engineering
+- View the high-level concept introduced by llama-index [(Link)](https://docs.llamaindex.ai/en/stable/getting_started/concepts.html)
+![wag workflow](/images/RAG.png)
 - Flow
   1. embed and store your documents in a ChromaDB collection
   2. run a query like find and summarize semantically relevant documents through chromadb
   3. pass the query and relevant documents to an LLM to generate a context-informed response.
-![rag workflow](/images/RAG_workflow.webp)
 - Vector store is a key component of RAG
   - [Vector stores that LLaMA support](https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores.html)
     > pros:
