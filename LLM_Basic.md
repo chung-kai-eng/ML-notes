@@ -81,6 +81,25 @@ $$
 
 - LLaMA index offers a `generate_question_context_pairs` (Get a golden dataset as a reference of correct answer)
 
+### Prompt Templates and System Message
+- it is important to follow original prompt template and system message to get better performance (during **fine-tuning phase** and **inference phase**)
+- Prompt template refers to how the input sentences are structured, including newlines, speaces, roles, or special tokens.
+  ```yaml
+  base_model:
+  data_path:
+  prompt_template: 
+  system_msg_options:
+
+  # for fine tune
+  num_epochs: 
+  lora_r:
+  lora_alpha:
+  lora_dropout:
+  ```
+- System Message: can be self-defined messages
+  - e.g. `Act as a software engineer`, `Please reply short sentence`, `You're a helpful and honest assistant. Always answer as helpfully as possible, while being safe`
+  - Some says that if you use the same system message as the one that used for pre-training the base model, you'll get better performance. But still depends on your projects.
+
 ## dify (Do it for you)
 - an open source library for building LLM application
   - View the technical spec first: [Link](https://docs.dify.ai/getting-started/readme/specifications-and-technical-features)
