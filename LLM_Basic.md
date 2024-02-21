@@ -72,6 +72,8 @@ $$
     - `Relevancy Evaluator`: measures if the response + source nodes (retrieved context) match the query.
 - Check LLaMA index evaluation metrics here 
   - [1](https://cookbook.openai.com/examples/evaluation/evaluate_rag_with_llamaindex#question-context-pair-generation), [2](https://docs.llamaindex.ai/en/stable/module_guides/evaluating/root.html)
+- Check LLM Evaluation metrics: [**Everything you need for LLM Evaluation](https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation), [Evaluation Example guidance](https://christophergs.com/blog/ai-engineering-evaluation-with-deepeval-and-open-source-models)
+  - [DeepEval](https://github.com/confident-ai/deepeval)
 
 ### How to evaluate RAG
 - mainly focus on two critical aspects
