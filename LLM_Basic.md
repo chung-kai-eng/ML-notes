@@ -55,7 +55,11 @@ $$
     - better interpretability and observability metrics as you can look at the context if a response doesn't seem right
       cons:
     - context window limitation
-  - ![Chroma DB (Vector DB general architecture)](/images/chroma-tenancy-hierarchy.png)
+  - <img src="/images/chroma-tenancy-hierarchy.png" width="500" height="350">
+  - Tenants: a group of a set of databases.
+  - Databases: a group of a set of collections. Designed to model a single application or project
+  - collections: include id, embeddings, documents, and others
+    - Others like some metadata, or some unique columns which can be utilized to filter when searching (reference vector db: Milvus)
   
 ## How to evaluate the LLM model performance
 1. **Human Evaluation**
