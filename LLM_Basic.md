@@ -55,7 +55,8 @@ $$
     - better interpretability and observability metrics as you can look at the context if a response doesn't seem right
       cons:
     - context window limitation
-
+  - ![Chroma DB (Vector DB general architecture)](/images/chroma-tenancy-hierarchy.png)
+  
 ## How to evaluate the LLM model performance
 1. **Human Evaluation**
 2. **Automated Metrics**
