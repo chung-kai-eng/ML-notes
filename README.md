@@ -71,6 +71,9 @@ Machine Learning Note
 - [comet]()
 - [Neptune.ai]()
 
+### A/B testing 
+- [Learning Resource](https://github.com/KuanHaoHuang/learn-ab-testing)
+
 [Lazyprediction for lists of models](https://github.com/shankarpandala/lazypredict)
 
 [Scikit Learn related projects](https://scikit-learn.org/stable/related_projects.html)
